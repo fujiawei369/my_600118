@@ -24,12 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run
+      - name: Run TrendRadar (Space News)
         env:
           CONFIG_PATH: "config/config_space.yaml"
           WORDS_PATH: "frequency_words_space.txt"
           DINGTALK_WEBHOOK_URL: ${{ secrets.DINGTALK_WEBHOOK_URL }}
           WEWORK_WEBHOOK_URL: ${{ secrets.WEWORK_WEBHOOK_URL }}
-        run: |
-          cd ${{ github.workspace }}
-          python main.py
+        run: python -m trendradar
