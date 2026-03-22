@@ -1,7 +1,3 @@
-# ═══════════════════════════════════════════════════════════════
-#                    TrendRadar 配置文件
-#                      Version: 1.2.0
-# ═══════════════════════════════════════════════════════════════
 app:
   timezone: "Asia/Shanghai"
   show_version_update: true
@@ -9,48 +5,39 @@ app:
 platforms:
   enabled: true
   sources:
-    # 只保留能抓取航天内容的垂直平台，剔除其他所有平台
+    # 只保留1个最精准的航天源，其他全剔除
     - id: "ithome"
       name: "IT之家"
-    - id: "guancha"
-      name: "观察者网"
 
 rss:
   enabled: true
   freshness_filter:
     enabled: true
-    max_age_days: 1  # 只抓1天内的新鲜航天新闻，减少旧闻干扰
+    max_age_days: 1
   feeds:
-    # 只保留航天专属 RSS 源，禁用所有其他源
-    - id: "space-news"
-      name: "Space.com 航天新闻"
-      url: "https://www.space.com/feeds/all"
+    # 只保留航天RSS源
     - id: "china-space"
       name: "中国航天科技集团"
       url: "https://www.casc.cn/rss.xml"
     - id: "nasa"
       name: "NASA 官方新闻"
       url: "https://www.nasa.gov/rss/dyn/allstories.rss"
-    # 禁用所有非航天 RSS 源
+    # 禁用所有其他RSS源
     - id: "ruanyifeng"
-      name: "阮一峰的网络日志"
-      url: "http://www.ruanyifeng.com/blog/atom.xml"
       enabled: false
     - id: "hacker-news"
-      name: "Hacker News"
-      url: "https://hnrss.org/frontpage"
       enabled: false
 
 report:
   mode: "current"
   display_mode: "keyword"
-  sort_by_position_first: true  # 按航天组优先排序，不按热度
+  sort_by_position_first: true
   rank_threshold: 5
-  max_news_per_keyword: 10  # 最多显示10条航天新闻，避免冗余
+  max_news_per_keyword: 5  # 最多5条，避免冗余
 
 display:
   region_order:
-    - hotlist  # 航天热榜放最前面
+    - hotlist
     - new_items
     - rss
     - standalone
@@ -60,19 +47,12 @@ display:
     new_items: true
     rss: true
     standalone: false
-    ai_analysis: false  # 关闭AI分析（避免未配置API Key报错）
-  standalone:
-    platforms: []
-    rss_feeds: []
-    max_items: 20
+    ai_analysis: false
 
 notification:
   enabled: true
   push_window:
     enabled: false
-    start: "20:00"
-    end: "22:00"
-    once_per_day: true
   channels:
     feishu:
       webhook_url: ""
@@ -133,12 +113,9 @@ ai:
   fallback_models: []
 
 ai_analysis:
-  enabled: false  # 未配置API Key，暂时关闭
+  enabled: false
   analysis_window:
     enabled: false
-    start: "09:00"
-    end: "22:00"
-    once_per_day: false
   language: "Chinese"
   prompt_file: "ai_analysis_prompt.txt"
   mode: "follow_report"
