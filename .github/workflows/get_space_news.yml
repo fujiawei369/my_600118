@@ -2,7 +2,7 @@ name: Get Space News
 
 on:
   schedule:
-    - cron: "0 10 * * *"  # UTC 10:00 = 中国时间18:00，和原热点错开
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 jobs:
@@ -26,11 +26,9 @@ jobs:
 
       - name: Run TrendRadar (Space News Only)
         env:
-          # 强制指定航天专属配置，绝对不加载原热点配置
+          # 关键：路径完全匹配原项目，都在config目录！
           CONFIG_PATH: "config/config_space.yaml"
-          WORDS_PATH: "frequency_words_space.txt"
-          # 复用你原有的Webhook，推送到同一个群，分两条消息
+          WORDS_PATH: "config/frequency_words_space.txt"
           DINGTALK_WEBHOOK_URL: ${{ secrets.DINGTALK_WEBHOOK_URL }}
           WEWORK_WEBHOOK_URL: ${{ secrets.WEWORK_WEBHOOK_URL }}
-        # 强制指定配置文件，彻底隔离原热点
-        run: python -m trendradar --config ${{ env.CONFIG_PATH }} --words ${{ env.WORDS_PATH }}
+        run: python -m trendradar
