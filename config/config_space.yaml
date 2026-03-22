@@ -1,0 +1,20 @@
+platforms:
+  enabled: true          # 启用航天资讯抓取
+  sources:
+    # 航天/科技核心资讯源（精准覆盖航天相关内容）
+    - id: "ithome"
+      name: "IT之家"
+    - id: "techweb"
+      name: "TechWeb"
+    - id: "cnbeta"
+      name: "cnBeta"
+    - id: "wallstreetcn-hot"
+      name: "华尔街见闻"
+    - id: "jiemian"
+      name: "界面新闻"
+    - id: "36kr"
+      name: "36氪"
+    - id: "thepaper"
+      name: "澎湃新闻"
+    - id: "guancha"
+      name: "观察者网"
