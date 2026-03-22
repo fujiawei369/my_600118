@@ -26,7 +26,7 @@ jobs:
 
       - name: Run TrendRadar (Space News Only)
         env:
-          # 关键：路径完全匹配原项目，都在config目录！
+          # 关键：路径完全匹配你项目的config目录，和原热点完全一致
           CONFIG_PATH: "config/config_space.yaml"
           WORDS_PATH: "config/frequency_words_space.txt"
           DINGTALK_WEBHOOK_URL: ${{ secrets.DINGTALK_WEBHOOK_URL }}
