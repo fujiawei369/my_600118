@@ -2,37 +2,34 @@ name: Get Space News
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # 每6小时推送一次，可自定义时间
-  workflow_dispatch:  # 支持手动触发测试
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
 
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 拉取完整仓库，确保所有文件都能找到
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"  # 匹配原项目Python版本
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # 安装原项目所有依赖，和原热点完全一致
+          pip install -r requirements.txt
 
-      - name: Run TrendRadar (Space News)
+      - name: Run
         env:
-          # 关键：路径必须和你创建的文件完全一致！
           CONFIG_PATH: "config/config_space.yaml"
           WORDS_PATH: "frequency_words_space.txt"
-          # 复用你原有的Webhook密钥，推送到同一个群，分两条消息
           DINGTALK_WEBHOOK_URL: ${{ secrets.DINGTALK_WEBHOOK_URL }}
           WEWORK_WEBHOOK_URL: ${{ secrets.WEWORK_WEBHOOK_URL }}
         run: |
-          # 关键：指定工作目录为仓库根目录，确保找到main.py！
           cd ${{ github.workspace }}
           python main.py
