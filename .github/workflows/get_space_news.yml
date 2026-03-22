@@ -26,8 +26,21 @@ jobs:
 
       - name: Run TrendRadar (Space News Only)
         env:
-          CONFIG_PATH: "config/config_space.yaml"
-          WORDS_PATH: "config/frequency_words_space.txt"
           DINGTALK_WEBHOOK_URL: ${{ secrets.DINGTALK_WEBHOOK_URL }}
           WEWORK_WEBHOOK_URL: ${{ secrets.WEWORK_WEBHOOK_URL }}
-        run: python -m trendradar
+        # 关键：直接在命令中替换配置文件路径，强制加载航天配置！
+        run: |
+          # 备份原热点配置（运行完恢复，不影响原热点）
+          mv config/config.yaml config/config_default.yaml
+          mv config/frequency_words.txt config/frequency_words_default.txt
+          
+          # 用航天配置替换默认配置
+          cp config/config_space.yaml config/config.yaml
+          cp config/frequency_words_space.txt config/frequency_words.txt
+          
+          # 运行程序（此时加载的是航天配置）
+          python -m trendradar
+          
+          # 恢复原热点配置（确保原工作流正常运行）
+          mv config/config_default.yaml config/config.yaml
+          mv config/frequency_words_default.txt config/frequency_words.txt
