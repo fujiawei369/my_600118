@@ -1,10 +1,8 @@
 name: Get Space News
-
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: '0 */6 * * *'  # 定时推送，和原热点错开可改
   workflow_dispatch:
-
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -13,10 +11,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Run TrendRadar (Space News)
         uses: ./.github/actions/run
         with:
+          # 只改这3个地方，其他完全和原热点一致！
           config_path: config/config_space.yaml
           words_path: frequency_words_space.txt
           wework_webhook_url: ${{ secrets.DINGTALK_WEBHOOK_URL }}
