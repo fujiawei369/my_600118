@@ -2,41 +2,26 @@
 #                    TrendRadar 配置文件
 #                      Version: 1.2.0
 # ═══════════════════════════════════════════════════════════════
-# 可视化配置编辑器地址: https://sansan0.github.io/TrendRadar/
-# ===============================================================
-# 1. 基础设置
-# ===============================================================
 app:
   timezone: "Asia/Shanghai"
   show_version_update: true
-# ===============================================================
-# 2. 数据源 - 热榜平台（精选航天相关垂直平台）
-# ===============================================================
+
 platforms:
   enabled: true
   sources:
+    # 只保留能抓取航天内容的垂直平台，剔除其他所有平台
     - id: "ithome"
       name: "IT之家"
-    - id: "techweb"
-      name: "TechWeb"
-    - id: "cnbeta"
-      name: "cnBeta"
     - id: "guancha"
       name: "观察者网"
-    - id: "thepaper"
-      name: "澎湃新闻"
-    - id: "ifeng"
-      name: "凤凰网"
-# ===============================================================
-# 3. 数据源 - RSS 订阅（新增航天相关 RSS 源）
-# ===============================================================
+
 rss:
   enabled: true
   freshness_filter:
     enabled: true
-    max_age_days: 3
+    max_age_days: 1  # 只抓1天内的新鲜航天新闻，减少旧闻干扰
   feeds:
-    # 航天相关 RSS 源（精选垂直内容）
+    # 只保留航天专属 RSS 源，禁用所有其他源
     - id: "space-news"
       name: "Space.com 航天新闻"
       url: "https://www.space.com/feeds/all"
@@ -46,7 +31,7 @@ rss:
     - id: "nasa"
       name: "NASA 官方新闻"
       url: "https://www.nasa.gov/rss/dyn/allstories.rss"
-    # 保留原版优质源（可选启用）
+    # 禁用所有非航天 RSS 源
     - id: "ruanyifeng"
       name: "阮一峰的网络日志"
       url: "http://www.ruanyifeng.com/blog/atom.xml"
@@ -55,22 +40,18 @@ rss:
       name: "Hacker News"
       url: "https://hnrss.org/frontpage"
       enabled: false
-# ===============================================================
-# 4. 报告模式（与原热点保持一致，便于对比）
-# ===============================================================
+
 report:
   mode: "current"
   display_mode: "keyword"
-  sort_by_position_first: false
+  sort_by_position_first: true  # 按航天组优先排序，不按热度
   rank_threshold: 5
-  max_news_per_keyword: 0
-# ===============================================================
-# 5. 推送内容控制（突出航天相关区域）
-# ===============================================================
+  max_news_per_keyword: 10  # 最多显示10条航天新闻，避免冗余
+
 display:
   region_order:
+    - hotlist  # 航天热榜放最前面
     - new_items
-    - hotlist
     - rss
     - standalone
     - ai_analysis
@@ -79,14 +60,12 @@ display:
     new_items: true
     rss: true
     standalone: false
-    ai_analysis: true
+    ai_analysis: false  # 关闭AI分析（避免未配置API Key报错）
   standalone:
     platforms: []
     rss_feeds: []
     max_items: 20
-# ===============================================================
-# 6. 推送通知（复用原版密钥配置，安全无风险）
-# ===============================================================
+
 notification:
   enabled: true
   push_window:
@@ -122,9 +101,7 @@ notification:
     generic_webhook:
       webhook_url: ""
       payload_template: ""
-# ===============================================================
-# 7. 存储配置（与原版一致，避免数据冲突）
-# ===============================================================
+
 storage:
   backend: "auto"
   formats:
@@ -144,9 +121,7 @@ storage:
   pull:
     enabled: false
     days: 7
-# ===============================================================
-# 8. AI 模型配置（复用原版，支持航天内容智能分析）
-# ===============================================================
+
 ai:
   model: "deepseek/deepseek-chat"
   api_key: ""
@@ -156,11 +131,9 @@ ai:
   max_tokens: 5000
   num_retries: 1
   fallback_models: []
-# ===============================================================
-# 9. AI 分析功能（聚焦航天内容深度解读）
-# ===============================================================
+
 ai_analysis:
-  enabled: true
+  enabled: false  # 未配置API Key，暂时关闭
   analysis_window:
     enabled: false
     start: "09:00"
@@ -170,18 +143,14 @@ ai_analysis:
   prompt_file: "ai_analysis_prompt.txt"
   mode: "follow_report"
   max_news_for_analysis: 60
-  include_rss: true  # 包含航天 RSS 源进行分析
+  include_rss: true
   include_rank_timeline: true
-# ===============================================================
-# 10. AI 翻译功能（默认关闭，按需启用）
-# ===============================================================
+
 ai_translation:
   enabled: false
   language: "English"
   prompt_file: "ai_translation_prompt.txt"
-# ===============================================================
-# 11. 高级设置（与原版一致，保证兼容性）
-# ===============================================================
+
 advanced:
   debug: false
   version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version"
