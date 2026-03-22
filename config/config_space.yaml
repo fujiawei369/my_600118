@@ -1,20 +1,211 @@
+# ═══════════════════════════════════════════════════════════════
+#                    TrendRadar 配置文件
+#                      Version: 1.2.0
+# ═══════════════════════════════════════════════════════════════
+# 可视化配置编辑器地址: https://sansan0.github.io/TrendRadar/
+# ===============================================================
+# 1. 基础设置
+# ===============================================================
+app:
+  timezone: "Asia/Shanghai"
+  show_version_update: true
+# ===============================================================
+# 2. 数据源 - 热榜平台（精选航天相关垂直平台）
+# ===============================================================
 platforms:
-  enabled: true          # 启用航天资讯抓取
+  enabled: true
   sources:
-    # 航天/科技核心资讯源（精准覆盖航天相关内容）
     - id: "ithome"
       name: "IT之家"
     - id: "techweb"
       name: "TechWeb"
     - id: "cnbeta"
       name: "cnBeta"
-    - id: "wallstreetcn-hot"
-      name: "华尔街见闻"
-    - id: "jiemian"
-      name: "界面新闻"
-    - id: "36kr"
-      name: "36氪"
-    - id: "thepaper"
-      name: "澎湃新闻"
     - id: "guancha"
       name: "观察者网"
+    - id: "thepaper"
+      name: "澎湃新闻"
+    - id: "ifeng"
+      name: "凤凰网"
+# ===============================================================
+# 3. 数据源 - RSS 订阅（新增航天相关 RSS 源）
+# ===============================================================
+rss:
+  enabled: true
+  freshness_filter:
+    enabled: true
+    max_age_days: 3
+  feeds:
+    # 航天相关 RSS 源（精选垂直内容）
+    - id: "space-news"
+      name: "Space.com 航天新闻"
+      url: "https://www.space.com/feeds/all"
+    - id: "china-space"
+      name: "中国航天科技集团"
+      url: "https://www.casc.cn/rss.xml"
+    - id: "nasa"
+      name: "NASA 官方新闻"
+      url: "https://www.nasa.gov/rss/dyn/allstories.rss"
+    # 保留原版优质源（可选启用）
+    - id: "ruanyifeng"
+      name: "阮一峰的网络日志"
+      url: "http://www.ruanyifeng.com/blog/atom.xml"
+      enabled: false
+    - id: "hacker-news"
+      name: "Hacker News"
+      url: "https://hnrss.org/frontpage"
+      enabled: false
+# ===============================================================
+# 4. 报告模式（与原热点保持一致，便于对比）
+# ===============================================================
+report:
+  mode: "current"
+  display_mode: "keyword"
+  sort_by_position_first: false
+  rank_threshold: 5
+  max_news_per_keyword: 0
+# ===============================================================
+# 5. 推送内容控制（突出航天相关区域）
+# ===============================================================
+display:
+  region_order:
+    - new_items
+    - hotlist
+    - rss
+    - standalone
+    - ai_analysis
+  regions:
+    hotlist: true
+    new_items: true
+    rss: true
+    standalone: false
+    ai_analysis: true
+  standalone:
+    platforms: []
+    rss_feeds: []
+    max_items: 20
+# ===============================================================
+# 6. 推送通知（复用原版密钥配置，安全无风险）
+# ===============================================================
+notification:
+  enabled: true
+  push_window:
+    enabled: false
+    start: "20:00"
+    end: "22:00"
+    once_per_day: true
+  channels:
+    feishu:
+      webhook_url: ""
+    dingtalk:
+      webhook_url: ""
+    wework:
+      webhook_url: ""
+      msg_type: "markdown"
+    telegram:
+      bot_token: ""
+      chat_id: ""
+    email:
+      from: ""
+      password: ""
+      to: ""
+      smtp_server: ""
+      smtp_port: ""
+    ntfy:
+      server_url: "https://ntfy.sh"
+      topic: ""
+      token: ""
+    bark:
+      url: ""
+    slack:
+      webhook_url: ""
+    generic_webhook:
+      webhook_url: ""
+      payload_template: ""
+# ===============================================================
+# 7. 存储配置（与原版一致，避免数据冲突）
+# ===============================================================
+storage:
+  backend: "auto"
+  formats:
+    sqlite: true
+    txt: false
+    html: true
+  local:
+    data_dir: "output"
+    retention_days: 0
+  remote:
+    retention_days: 0
+    endpoint_url: ""
+    bucket_name: ""
+    access_key_id: ""
+    secret_access_key: ""
+    region: ""
+  pull:
+    enabled: false
+    days: 7
+# ===============================================================
+# 8. AI 模型配置（复用原版，支持航天内容智能分析）
+# ===============================================================
+ai:
+  model: "deepseek/deepseek-chat"
+  api_key: ""
+  api_base: ""
+  timeout: 120
+  temperature: 1.0
+  max_tokens: 5000
+  num_retries: 1
+  fallback_models: []
+# ===============================================================
+# 9. AI 分析功能（聚焦航天内容深度解读）
+# ===============================================================
+ai_analysis:
+  enabled: true
+  analysis_window:
+    enabled: false
+    start: "09:00"
+    end: "22:00"
+    once_per_day: false
+  language: "Chinese"
+  prompt_file: "ai_analysis_prompt.txt"
+  mode: "follow_report"
+  max_news_for_analysis: 60
+  include_rss: true  # 包含航天 RSS 源进行分析
+  include_rank_timeline: true
+# ===============================================================
+# 10. AI 翻译功能（默认关闭，按需启用）
+# ===============================================================
+ai_translation:
+  enabled: false
+  language: "English"
+  prompt_file: "ai_translation_prompt.txt"
+# ===============================================================
+# 11. 高级设置（与原版一致，保证兼容性）
+# ===============================================================
+advanced:
+  debug: false
+  version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version"
+  mcp_version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version_mcp"
+  configs_version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version_configs"
+  crawler:
+    request_interval: 2000
+    use_proxy: false
+    default_proxy: "http://127.0.0.1:10801"
+  rss:
+    request_interval: 1000
+    timeout: 15
+    use_proxy: false
+    proxy_url: ""
+  weight:
+    rank: 0.6
+    frequency: 0.3
+    hotness: 0.1
+  max_accounts_per_channel: 3
+  batch_size:
+    default: 4000
+    dingtalk: 20000
+    feishu: 30000
+    bark: 4000
+    slack: 4000
+  batch_send_interval: 3
+  feishu_message_separator: "━━━━━━━━━━━━━━━━━━━"
